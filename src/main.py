@@ -11,7 +11,7 @@ st.set_page_config(
 def main():
     st.markdown(
         """
-        # Welcome to Streamlit!
+        # Welcome to stapp-query-hub!
         [streamlit app](https://streamlit.io/) for navigate to query info.
         """
     )
