@@ -6,6 +6,7 @@ import streamlit as st
 # import wikipedia
 
 from components.WikipediaPage import wiki_page_viewer
+from components.WikipediaLangSelector import WikipediaLangSelector
 from functions.AppLogger import AppLogger
 from functions.WikipediaQuery import WikipediaQuery
 
@@ -15,6 +16,8 @@ APP_TITLE = "Wikipedia Search"
 
 def initial_session_state():
     # Wikipedia Searchの状態・結果を管理するセッションの初期化
+    if "lang_code" not in st.session_state:
+        st.session_state.lang_code = "ja"
     if "wiki_query_word" not in st.session_state:
         st.session_state.wiki_query_word = ""
     if "wiki_query_results" not in st.session_state:
@@ -63,9 +66,15 @@ def main():
         col2,
         col3,
         col4,
-    ) = st.columns([2, 1, 1, 1])
+    ) = st.columns([1, 2, 1, 1])
 
     with col1:
+        wiki_lang_selector = WikipediaLangSelector()
+        st.session_state.lang_code = wiki_lang_selector.select_language(
+            lang_code=st.session_state.lang_code
+        )
+
+    with col2:
         st.session_state.wiki_num_results = st.slider(
             label="Number of Results",
             min_value=1,
@@ -73,7 +82,7 @@ def main():
             step=1,
             value=st.session_state.wiki_num_results,
         )
-    with col2:
+    with col3:
         if st.button(label="🔍 Search", type="primary"):
             st.session_state.wiki_query_results = []
             # blank input case
@@ -84,19 +93,10 @@ def main():
 
             # query word
             try:
-                # words = wikipedia.search(user_input, results=5)
-
-                # words = wikipedia.search(user_input, results=5)
-                # for word in words:
-                #     st.session_state.wiki_query_results.append(
-                #         {
-                #             "word": word,
-                #             "summary": wikipedia.summary(word),
-                #             "link": f"https://ja.wikipedia.org/wiki/{word}",
-                #         }
-                #     )
                 st.session_state.wiki_query_word = user_input
-                wikipedia_query = WikipediaQuery(user_input)
+                wikipedia_query = WikipediaQuery(
+                    query_word=user_input, lang=st.session_state.lang_code
+                )
                 st.session_state.wiki_query_results = wikipedia_query.search(
                     query_word=user_input,
                     num_results=st.session_state.wiki_num_results,
@@ -106,15 +106,13 @@ def main():
                 time.sleep(2)
                 st.rerun()
 
-    with col3:
+    with col4:
         if st.button("🧹 Clear"):
             st.session_state.wiki_query_word = ""
             st.session_state.wiki_query_results = []
             st.info("Cleared!")
             time.sleep(2)
             st.rerun()
-    with col4:
-        pass
 
     # Display the search results
     st.write("### Search Results")

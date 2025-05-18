@@ -5,12 +5,29 @@ from functions.AppLogger import AppLogger
 
 
 class WikipediaQuery:
-    def __init__(self, query_word=None):
-        wikipedia.set_lang("ja")
+    def __init__(self, query_word=None, lang="ja"):
         self.query_word = query_word
+        self.used_lang = lang
         self.results = []
         self.page = None
         self.logger = AppLogger(name="WikipediaQuery")
+        self.set_lang(self.used_lang)
+
+    def set_lang(self, lang="ja"):
+        """
+        Set the language for Wikipedia search.
+        :param lang: Language code (e.g., "ja" for Japanese)
+        """
+        if lang != self.used_lang:
+            self.logger.info_log(
+                f"Change language from {self.used_lang} to {lang}"
+            )
+            self.used_lang = lang
+        else:
+            self.logger.info_log(f"Set Language to {self.used_lang}")
+
+        wikipedia.set_lang(lang)
+        self.logger.info_log(f"Set Wikipedia language to {lang}")
 
     def search(self, query_word="", num_results=5):
         if not query_word:
