@@ -54,18 +54,16 @@ class WikipediaPage:
         with st.expander("HTML（全文表示）"):
             st.code(wp.html, language="html")
 
-    def display_links(self):
+    def display_links_images(self):
         if not self.page:
             st.error("ページが読み込まれていません。")
             return
 
         wp = self.page
-        st.subheader("リンク")
-        st.write(f"リンク数: {len(wp.links)}")
-        with st.expander("リンク一覧"):
+        st.subheader("リンク・画像")
+        with st.expander(f"リンク一覧: {len(wp.links)}"):
             st.write(wp.links)
-        st.write(f"画像数: {len(wp.images)}")
-        with st.expander("画像URL一覧"):
+        with st.expander(f"画像URL一覧: {len(wp.images)}"):
             st.write(wp.images)
 
     def display_references(self):
@@ -75,8 +73,7 @@ class WikipediaPage:
 
         wp = self.page
         st.subheader("参考")
-        st.write(f"参考文献数: {len(wp.references)}")
-        with st.expander("参考文献URL一覧"):
+        with st.expander(f"参考文献数: {len(wp.references)}"):
             st.write(wp.references)
 
     def display_all_info(self):
@@ -86,20 +83,34 @@ class WikipediaPage:
 
         wp = self.page
         st.subheader("全情報")
-        st.write("title:", wp.title)
-        st.write("url:", wp.url)
-        st.write("original_title:", wp.original_title)
-        st.write("pageid:", wp.pageid)
-        st.write("parent_id:", wp.parent_id)
-        st.write("revision_id:", wp.revision_id)
+        with st.expander("ページ情報:"):
+            st.write("title, url, original_title")
+            st.code(wp.title)
+            st.code(wp.url)
+            st.code(wp.original_title)
+
+            st.write("pageid, parent_id, revision_id")
+            st.code(wp.pageid)
+            st.code(wp.parent_id)
+            st.code(wp.revision_id)
         # st.write("coordinates:", wp.coordinates)
-        st.write("summary:", wp.summary)
-        st.write("categories:", wp.categories)
+        with st.expander("概要:"):
+            st.code(wp.summary)
+        with st.expander("本文（全文表示）"):
+            st.code(wp.content)
+        with st.expander(f"カテゴリ ({len(wp.categories)})"):
+            st.code(wp.categories)
         # st.write("section:", wp.section)
-        st.write("sections:", wp.sections)
-        st.write("content:", wp.content)
-        st.write("html:", wp.html)
-        st.write("links:", self.page.links)
+        with st.expander("セクション一覧"):
+            st.code(wp.sections)
+        with st.expander(f"リンク一覧: {len(wp.links)}"):
+            st.code(self.page.links)
+        with st.expander(f"画像URL一覧: {len(wp.images)}"):
+            st.code(wp.images)
+        with st.expander(f"参考文献数: {len(wp.references)}"):
+            st.code(wp.references)
+        with st.expander("HTML"):
+            st.code(wp.html, language="html")
 
 
 def wiki_page_viewer(title=None):
@@ -108,13 +119,12 @@ def wiki_page_viewer(title=None):
     """
     wp = WikipediaPage(title)
     wp.display_linked_title()
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(
+    tab1, tab2, tab3, tab4 = st.tabs(
         [
             "ページ情報・概要・カテゴリ",
             "詳細",
-            "リンク",
-            "画像・参考",
-            "全情報",
+            "リンク・画像・参考",
+            "全情報(for copy)",
         ]
     )
     with tab1:
@@ -122,8 +132,9 @@ def wiki_page_viewer(title=None):
     with tab2:
         wp.display_page_detail()
     with tab3:
-        wp.display_links()
-    with tab4:
+        wp.display_links_images()
         wp.display_references()
-    with tab5:
+    with tab4:
         wp.display_all_info()
+
+    return wp
