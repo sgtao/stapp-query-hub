@@ -1,11 +1,19 @@
 import streamlit as st
 
-"""
-# Welcome to Streamlit!
+st.set_page_config(
+    page_title="Streamlit App",
+    page_icon=":shark:",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
+st.markdown(
+    """
+    # Welcome to Streamlit!
+    [streamlit app](https://streamlit.io/) for navigate to query info.
+    """
+)
 
-Edit `/src` and `/tests` to customize this app to your heart's desire :heart:.
-"""
 
 # サイドバーのページに移動
 # st.page_link("pages/example_app.py", label="Go to Example App")
-st.page_link("pages/01_example_app.py", label="Go to Example App", icon="🚀")
+# st.page_link("pages/01_example_app.py", label="Go to Example App", icon="🚀")
