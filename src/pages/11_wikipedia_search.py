@@ -19,7 +19,7 @@ def initial_session_state():
         # st.rerun()
 
 
-@st.dialog("Modal:")
+@st.dialog("Modal:", width="large")
 def modal(type=None, title=None):
     def _modal_closer():
         if st.button(label="Close Modal"):
@@ -36,6 +36,8 @@ def modal(type=None, title=None):
 
 
 def main():
+    st.page_link("main.py", label="Back to Home", icon="🏠")
+
     st.title(f"📔 {APP_TITLE}")
 
     """
@@ -43,7 +45,6 @@ def main():
     Search user input by wikipedia
     """
     wikipedia.set_lang("ja")
-    # words = []
 
     user_input = st.text_input(
         label="Search Wikipedia",
@@ -96,9 +97,10 @@ def main():
     with col4:
         pass
     with col5:
-        if st.button("Rerun", icon="🏃"):
-            st.rerun()
+        pass
 
+    # Display the search results
+    st.write("### Search Results")
     if not st.session_state.wiki_query_results:
         st.info("一致なし")
     else:
@@ -107,7 +109,7 @@ def main():
                 st.write(result.get("link"))
                 st.info(result.get("summary"))
                 if st.button(
-                    label="🔗 WikiPage",
+                    label="🔗 Wiki. Page",
                     help=f"Open {result.get('word')} in Wikipedia",
                     key=f"wiki_link_{result.get('word')}",
                 ):

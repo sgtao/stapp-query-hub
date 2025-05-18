@@ -26,17 +26,16 @@ class WikipediaPage:
             return
 
         wp = self.page
-        st.subheader("ページ情報")
-        st.write("ページ情報")
-        st.write("original_title:", wp.original_title)
-        st.write("pageid:", wp.pageid)
-        st.write("parent_id:", wp.parent_id)
-        st.write("revision_id:", wp.revision_id)
+        with st.expander("ページ情報:"):
+            st.write("original_title:", wp.original_title)
+            st.write("pageid:", wp.pageid)
+            st.write("parent_id:", wp.parent_id)
+            st.write("revision_id:", wp.revision_id)
         # st.write("coordinates:", wp.coordinates)
-        st.write("概要:")
-        st.write(wp.summary)
-        st.write(f"カテゴリ ({len(wp.categories)})")
-        st.write(wp.categories)
+        with st.expander("概要:"):
+            st.write(wp.summary)
+        with st.expander(f"カテゴリ ({len(wp.categories)})"):
+            st.write(wp.categories)
 
     def display_page_detail(self):
         if not self.page:
@@ -105,9 +104,10 @@ def wiki_page_viewer(title=None):
     Wikipediaページを表示する
     """
     wp = WikipediaPage(title)
+    wp.display_linked_title()
     tab1, tab2, tab3, tab4, tab5 = st.tabs(
         [
-            "概要・ページ情報・カテゴリ",
+            "ページ情報・概要・カテゴリ",
             "詳細",
             "リンク",
             "画像・参考",
