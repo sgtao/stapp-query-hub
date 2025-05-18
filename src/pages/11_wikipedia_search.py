@@ -17,10 +17,10 @@ def initial_session_state():
     # Wikipedia Searchの状態・結果を管理するセッションの初期化
     if "wiki_query_word" not in st.session_state:
         st.session_state.wiki_query_word = ""
-        # st.rerun()
     if "wiki_query_results" not in st.session_state:
         st.session_state.wiki_query_results = []
-        # st.rerun()
+    if "wiki_num_results" not in st.session_state:
+        st.session_state.wiki_num_results = 5
 
 
 @st.dialog("Modal:", width="large")
@@ -65,7 +65,16 @@ def main():
         col4,
         col5,
     ) = st.columns(5)
+
     with col1:
+        st.session_state.wiki_num_results = st.slider(
+            label="Number of Results",
+            min_value=1,
+            max_value=20,
+            step=1,
+            value=st.session_state.wiki_num_results,
+        )
+    with col2:
         if st.button(label="🔍 Search", type="primary"):
             st.session_state.wiki_query_results = []
             # blank input case
@@ -90,22 +99,21 @@ def main():
                 st.session_state.wiki_query_word = user_input
                 wikipedia_query = WikipediaQuery(user_input)
                 st.session_state.wiki_query_results = wikipedia_query.search(
-                    user_input
+                    query_word=user_input,
+                    num_results=st.session_state.wiki_num_results,
                 )
             except Exception as e:
                 st.error(f"Error: {e}")
                 time.sleep(2)
                 st.rerun()
 
-    with col2:
+    with col3:
         if st.button("🧹 Clear"):
             st.session_state.wiki_query_word = ""
             st.session_state.wiki_query_results = []
             st.info("Cleared!")
             time.sleep(2)
             st.rerun()
-    with col3:
-        pass
     with col4:
         pass
     with col5:

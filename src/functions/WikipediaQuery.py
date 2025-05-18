@@ -12,7 +12,7 @@ class WikipediaQuery:
         self.page = None
         self.logger = AppLogger(name="WikipediaQuery")
 
-    def search(self, query_word=""):
+    def search(self, query_word="", num_results=5):
         if not query_word:
             return []
         else:
@@ -20,7 +20,22 @@ class WikipediaQuery:
 
         self.results = []
         try:
-            words = wikipedia.search(self.query_word, results=5)
+            # suggested_query = wikipedia.suggest(self.query_word)
+            # if suggested_query:
+            #     self.logger.info_log(
+            #         f"Suggested for '{self.query_word}': {suggested_query}"
+            #     )
+            #     self.query_word = suggested_query
+            # else:
+            #     self.logger.info_log(f"No suggestion of {self.query_word}.")
+            #     return self.results
+
+            # Search for the query word
+            words = wikipedia.search(
+                query=self.query_word,
+                results=num_results,
+                # suggestion=True,
+            )
             for word in words:
                 self.results.append(
                     {
