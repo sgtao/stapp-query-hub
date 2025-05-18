@@ -2,9 +2,13 @@
 import time
 
 import streamlit as st
-import wikipedia
+
+# import wikipedia
 
 from components.WikipediaPage import wiki_page_viewer
+from functions.AppLogger import AppLogger
+from functions.WikipediaQuery import WikipediaQuery
+
 
 APP_TITLE = "Wikipedia Search"
 
@@ -36,6 +40,9 @@ def modal(type=None, title=None):
 
 
 def main():
+    app_logger = AppLogger(APP_TITLE)
+    app_logger.app_start()
+
     st.page_link("main.py", label="Back to Home", icon="🏠")
 
     st.title(f"📔 {APP_TITLE}")
@@ -44,7 +51,7 @@ def main():
     In the meantime,
     Search user input by wikipedia
     """
-    wikipedia.set_lang("ja")
+    # wikipedia.set_lang("ja")
 
     user_input = st.text_input(
         label="Search Wikipedia",
@@ -60,6 +67,7 @@ def main():
     ) = st.columns(5)
     with col1:
         if st.button(label="🔍 Search", type="primary"):
+            st.session_state.wiki_query_results = []
             # blank input case
             if user_input == "":
                 st.warning("Please enter a word to search.")
@@ -68,20 +76,24 @@ def main():
 
             # query word
             try:
-                words = wikipedia.search(user_input, results=5)
-                for word in words:
-                    st.session_state.wiki_query_results.append(
-                        {
-                            "word": word,
-                            "summary": wikipedia.summary(word),
-                            "link": f"https://ja.wikipedia.org/wiki/{word}",
-                        }
-                    )
+                # words = wikipedia.search(user_input, results=5)
+
+                # words = wikipedia.search(user_input, results=5)
+                # for word in words:
+                #     st.session_state.wiki_query_results.append(
+                #         {
+                #             "word": word,
+                #             "summary": wikipedia.summary(word),
+                #             "link": f"https://ja.wikipedia.org/wiki/{word}",
+                #         }
+                #     )
                 st.session_state.wiki_query_word = user_input
+                wikipedia_query = WikipediaQuery(user_input)
+                st.session_state.wiki_query_results = wikipedia_query.search(
+                    user_input
+                )
             except Exception as e:
                 st.error(f"Error: {e}")
-                st.session_state.wiki_query_word = ""
-                st.session_state.wiki_query_results = []
                 time.sleep(2)
                 st.rerun()
 

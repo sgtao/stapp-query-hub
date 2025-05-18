@@ -1,19 +1,22 @@
 # WikipediaPage.py
 import streamlit as st
-import wikipedia
+
+# import wikipedia
+
+from functions.WikipediaQuery import WikipediaQuery
 
 
 class WikipediaPage:
     def __init__(self, title=None):
         self.title = title
         if title:
-            # self.page = wikipedia.page(title)
             self.load_page(title)
         else:
             self.page = None
 
     def load_page(self, title):
-        self.page = wikipedia.page(title)
+        wikipedia_query = WikipediaQuery(title)
+        self.page = wikipedia_query.get_page()
         self.title = self.page.title
         self.url = self.page.url
 
