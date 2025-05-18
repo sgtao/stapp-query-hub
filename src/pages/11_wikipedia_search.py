@@ -63,8 +63,7 @@ def main():
         col2,
         col3,
         col4,
-        col5,
-    ) = st.columns(5)
+    ) = st.columns([2, 1, 1, 1])
 
     with col1:
         st.session_state.wiki_num_results = st.slider(
@@ -115,8 +114,6 @@ def main():
             time.sleep(2)
             st.rerun()
     with col4:
-        pass
-    with col5:
         pass
 
     # Display the search results
