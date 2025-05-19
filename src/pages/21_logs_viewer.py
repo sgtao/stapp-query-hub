@@ -63,10 +63,11 @@ def main():
             selected_log_file != "logs/api_request.log"
         )
 
+    index_log_file = log_files.index("logs/api_request.log")
     selected_log_file = st.selectbox(
         label="Select log file",
         options=log_files,
-        index=0,
+        index=index_log_file,
         on_change=_on_change_select,
     )
 

@@ -4,25 +4,20 @@ import time
 import streamlit as st
 
 from components.SideMenus import SideMenus
+from components.WikiSearch import WikiSearch
 from components.WikipediaPage import wiki_page_viewer
-from components.WikipediaLangSelector import WikipediaLangSelector
+
+# from components.WikipediaLangSelector import WikipediaLangSelector
 from functions.AppLogger import AppLogger
-from functions.WikipediaQuery import WikipediaQuery
+
+# from functions.WikipediaQuery import WikipediaQuery
 
 
 APP_TITLE = "Wikipedia Search"
 
 
 def initial_session_state():
-    # Wikipedia Searchの状態・結果を管理するセッションの初期化
-    if "lang_code" not in st.session_state:
-        st.session_state.lang_code = "ja"
-    if "wiki_query_word" not in st.session_state:
-        st.session_state.wiki_query_word = ""
-    if "wiki_query_results" not in st.session_state:
-        st.session_state.wiki_query_results = []
-    if "wiki_num_results" not in st.session_state:
-        st.session_state.wiki_num_results = 5
+    pass
 
 
 @st.dialog("Modal:", width="large")
@@ -54,71 +49,17 @@ def main():
     Search user input by wikipedia
     """
     # wikipedia.set_lang("ja")
-
-    user_input = st.text_input(
-        label="Search Wikipedia",
-        value=st.session_state.wiki_query_word,
-        placeholder="Search Wikipedia",
-    )
-    (
-        col1,
-        col2,
-        col3,
-        col4,
-    ) = st.columns([1, 2, 1, 1])
-
-    with col1:
-        wiki_lang_selector = WikipediaLangSelector()
-        st.session_state.lang_code = wiki_lang_selector.select_language(
-            lang_code=st.session_state.lang_code
-        )
-
-    with col2:
-        st.session_state.wiki_num_results = st.slider(
-            label="Number of Results",
-            min_value=1,
-            max_value=20,
-            step=1,
-            value=st.session_state.wiki_num_results,
-        )
-    with col3:
-        if st.button(label="🔍 Search", type="primary"):
-            st.session_state.wiki_query_results = []
-            # blank input case
-            if user_input == "":
-                st.warning("Please enter a word to search.")
-                time.sleep(2)
-                st.rerun()
-
-            # query word
-            try:
-                st.session_state.wiki_query_word = user_input
-                wikipedia_query = WikipediaQuery(
-                    query_word=user_input, lang=st.session_state.lang_code
-                )
-                st.session_state.wiki_query_results = wikipedia_query.search(
-                    query_word=user_input,
-                    num_results=st.session_state.wiki_num_results,
-                )
-            except Exception as e:
-                st.error(f"Error: {e}")
-                time.sleep(2)
-                st.rerun()
-
-    with col4:
-        if st.button("🧹 Clear"):
-            st.session_state.wiki_query_word = ""
-            st.session_state.wiki_query_results = []
-            st.info("Cleared!")
-            time.sleep(2)
-            st.rerun()
+    wiki_search = WikiSearch()
+    query_results = wiki_search.render_query_inputs()
 
     # Display the search results
     st.write("### Search Results")
-    if not st.session_state.wiki_query_results:
+    # if not st.session_state.wiki_query_results:
+    if not query_results:
         st.info("一致なし")
     else:
-        for result in st.session_state.wiki_query_results:
+        # for result in st.session_state.wiki_query_results:
+        for result in query_results:
             with st.expander(f"📚 {result.get('word')}", expanded=False):
                 st.write(result.get("link"))
                 st.info(result.get("summary"))
