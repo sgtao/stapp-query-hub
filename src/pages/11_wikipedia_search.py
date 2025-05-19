@@ -3,8 +3,7 @@ import time
 
 import streamlit as st
 
-# import wikipedia
-
+from components.SideMenus import SideMenus
 from components.WikipediaPage import wiki_page_viewer
 from components.WikipediaLangSelector import WikipediaLangSelector
 from functions.AppLogger import AppLogger
@@ -137,5 +136,8 @@ def main():
 if __name__ == "__main__":
     # Initialize session state
     initial_session_state()
+    # SideMenu for Debugging
+    side_menus = SideMenus()
+    side_menus.session_state_viewer()
     # Run the main function
     main()
