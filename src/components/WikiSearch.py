@@ -24,6 +24,7 @@ class WikiSearch:
             label="Search Wikipedia",
             value=st.session_state.wiki_query_word,
             placeholder="Search Wikipedia",
+            # key="wiki_query_input",
         )
 
     def lang_selector(self):
@@ -83,6 +84,7 @@ class WikiSearch:
 
     def clear_query(self):
         if st.button("🧹 Clear"):
+            # st.session_state["wiki_query_input"] = ""
             st.session_state.wiki_query_word = ""
             st.session_state.wiki_query_results = []
             st.session_state.lang_code = "ja"
@@ -91,7 +93,23 @@ class WikiSearch:
             st.rerun()
 
     def render_query_inputs(self):
-        query_word = self.query_input()
+        query_word = st.session_state.wiki_query_word
+        query_results = st.session_state.wiki_query_results
+        lang_code = st.session_state.lang_code
+        num_results = st.session_state.wiki_num_results
+
+        # submit to query
+        col1, col2 = st.columns([4, 1], vertical_alignment="bottom")
+        with col1:
+            query_word = self.query_input()
+        with col2:
+            query_results = self.query_submit(
+                query_word=query_word,
+                lang_code=lang_code,
+                num_results=num_results,
+            )
+
+        # search control
         (
             col1,
             col2,
@@ -106,11 +124,7 @@ class WikiSearch:
             num_results = self.num_results_slider()
 
         with col3:
-            query_results = self.query_submit(
-                query_word=query_word,
-                lang_code=lang_code,
-                num_results=num_results,
-            )
+            pass
 
         with col4:
             self.clear_query()
