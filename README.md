@@ -10,8 +10,15 @@
 poetry install
 
 # start poetry virtual env.
-# poetry shell # for poetry 1.x version
-eval $(poetry env activate) # for poetry 2.x version
+## poetry shell # for poetry 1.x version
+
+## Bash/Zsh/Csh # for poetry 2.x version
+eval $(poetry env activate)
+
+## Powershell
+Invoke-Expression (poetry env activate)
+## Fish
+eval (poetry env activate)
 
 # when finish poetry virtual env.
 deactivate
