@@ -1,4 +1,5 @@
 # SearchResultRecorder.py
+import datetime
 import os
 import yaml
 
@@ -20,13 +21,43 @@ class SearchResultRecorder:
         if not os.path.exists(self.results_dir):
             os.makedirs(self.results_dir)
 
-    def save_to_yamlfile(self, data):
+    def save_to_yamlfile(self, label="Wikipedia", query=None, data=None):
         """
-        データをYAML形式でファイルに上書き保存
+        検索結果をYAMLファイルにリスト形式で追記保存
         """
-        with open(self.yaml_file, "w", encoding="utf-8") as f:
+        # タイムスタンプ生成
+        now = datetime.datetime.now()
+        timestamp = now.strftime("%y%m%d-%H:%M:%S")
+
+        # 1件分のレコードを作成
+        item = {
+            "type": label,
+            "timestamp": timestamp,
+            "query": query,
+            "result": data,
+        }
+
+        # # 既存ファイルの読み込み（なければ空リスト）
+        # if os.path.exists(self.yaml_file):
+        #     with open(self.yaml_file, "r", encoding="utf-8") as f:
+        #         try:
+        #             items = yaml.safe_load(f)
+        #             if not isinstance(items, list):
+        #                 items = []
+        #         except Exception:
+        #             items = []
+        # else:
+        #     items = []
+        items = []
+
+        # 新しいitemを追加
+        items.append(item)
+
+        # YAMLとして上書き保存
+        # with open(self.yaml_file, "w", encoding="utf-8") as f:
+        with open(self.yaml_file, "a", encoding="utf-8") as f:
             yaml.safe_dump(
-                data, f, allow_unicode=True, default_flow_style=False
+                items, f, allow_unicode=True, default_flow_style=False
             )
 
     def load_from_yamlfile(self):

@@ -4,6 +4,7 @@ import time
 import streamlit as st
 
 from components.WikipediaLangSelector import WikipediaLangSelector
+from functions.SearchResultRecorder import SearchResultRecorder
 from functions.WikipediaQuery import WikipediaQuery
 
 
@@ -73,6 +74,15 @@ class WikiSearch:
                     # num_results=st.session_state.wiki_num_results,
                     num_results=num_results,
                 )
+
+                # search_recorder.save_to_yamlfile(query_results)
+                search_recorder = SearchResultRecorder()
+                search_recorder.save_to_yamlfile(
+                    label="Wikipedia",
+                    query=query_word,
+                    data=wiki_query_results,
+                )
+
             except Exception as e:
                 st.error(f"Error: {e}")
                 time.sleep(2)
