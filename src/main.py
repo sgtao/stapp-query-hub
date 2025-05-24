@@ -19,12 +19,18 @@ def main():
     # サイドバーのページに移動
     # st.page_link("pages/example_app.py", label="Go to Example App")
     st.page_link(
-        "pages/11_wikipedia_search.py",
+        page="pages/11_wikipedia_search.py",
         label="Go to Wikipedia Search App",
         icon="📔",
     )
     # ログ表示ページへのリンク
     st.page_link("pages/21_logs_viewer.py", label="View Logs", icon="📄")
+    # query 結果表示ページへのリンク
+    st.page_link(
+        page="pages/22_query_results_viewer.py",
+        label="View Query Results",
+        icon="👓",
+    )
 
 
 if __name__ == "__main__":
