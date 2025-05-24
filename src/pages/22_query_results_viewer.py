@@ -49,6 +49,11 @@ def rotate_yaml_file(yaml_file_path):
         base, ext = os.path.splitext(yaml_file_path)
         rotated_file = f"{base}_{now}{ext}"
         os.rename(yaml_file_path, rotated_file)
+        if not os.path.exists(yaml_file_path):
+            # デフォルトのYAMLファイルが存在しない場合, create blank file
+            with open(yaml_file_path, "w", encoding="utf-8") as f:
+                f.write(f"# created at {now}\n")
+
         st.success(f"YAMLファイルをローテートしました: {rotated_file}")
         return rotated_file
     except FileNotFoundError:

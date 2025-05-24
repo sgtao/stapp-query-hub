@@ -15,7 +15,7 @@ class SearchResultRecorder:
         :param yaml_file: 保存先YAMLファイルのパス
         """
         self.yaml_file = yaml_file
-        self.results_dir = os.path.dirname(yaml_file)
+        self.results_dir = RESULTS_DIR
 
         # ディレクトリがなければ作成
         if not os.path.exists(self.results_dir):
@@ -78,9 +78,13 @@ class SearchResultRecorder:
 
     def get_yaml_filelist(self):
         # resultsディレクトリ内のYAMLファイル一覧
-        return [
-            os.path.join(self.results_dir, f)
-            for f in os.listdir(self.results_dir)
-            if os.path.isfile(os.path.join(self.results_dir, f))
-            and f.endswith(".yaml")
-        ]
+        yaml_files = []
+        if not os.path.exists(self.results_dir):
+            return yaml_files
+
+        for f in os.listdir(self.results_dir):
+            if os.path.isfile(
+                os.path.join(self.results_dir, f)
+            ) and f.endswith(".yaml"):
+                yaml_files.append(os.path.join(self.results_dir, f))
+        return yaml_files

@@ -4,6 +4,7 @@ import streamlit as st
 # import wikipedia
 
 from functions.WikipediaQuery import WikipediaQuery
+from functions.SearchResultRecorder import SearchResultRecorder
 
 
 class WikipediaPage:
@@ -19,6 +20,22 @@ class WikipediaPage:
         self.page = wikipedia_query.get_page()
         self.title = self.page.title
         self.url = self.page.url
+        # record wikipage result
+        search_recorder = SearchResultRecorder()
+        results = []
+        results.append(
+            {
+                "word": self.page.title,
+                "link": self.page.url,
+                "pageid": self.page.pageid,
+                "summary": self.page.summary,
+            }
+        )
+        search_recorder.save_to_yamlfile(
+            label="WikiPage",
+            query=title,
+            data=results,
+        )
 
     def display_linked_title(self):
         st.markdown(f"### [{self.title}]({self.url})")
@@ -122,7 +139,7 @@ def wiki_page_viewer(title=None):
     tab1, tab2, tab3, tab4 = st.tabs(
         [
             "ページ情報・概要・カテゴリ",
-            "詳細",
+            "詳細・本文",
             "リンク・画像・参考",
             "全情報(for copy)",
         ]
