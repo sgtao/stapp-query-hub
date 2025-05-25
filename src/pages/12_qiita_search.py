@@ -56,6 +56,7 @@ def qiita_item(article, id=None, article_body=None, info_open=True):
         tag_list = " ".join(tag["name"] for tag in article["tags"])
         st.write()
         st.info(f"タグ: {tag_list}")
+        # st.markdown(f"## Title: {article['title']}")
         st.markdown(article["body"])
 
     if article_body is not None:
@@ -100,6 +101,7 @@ def main():
             data=qiita_query_results,
         )
         st.session_state.query_results = qiita_query_results
+        # st.session_state.qiita_result = qiita_requestor.get_results()
         st.rerun()
 
     # Display the search results

@@ -32,11 +32,21 @@ def display_yaml_results(yaml_file_path):
                 st.write("**時刻:**", item.get("timestamp", ""))
                 st.write("**結果:**")
                 for res in item.get("result", []):
-                    st.markdown(
-                        f"- [{res.get('word', '')}]({res.get('link', '')})"
-                    )
+                    # for Wikipedia results
+                    if "word" in res:
+                        st.markdown(
+                            f"- [{res.get('word', '')}]({res.get('link', '')})"
+                        )
                     if "summary" in res:
                         st.caption(res["summary"])
+                    # for Qiita results
+                    if "title" in res:
+                        st.markdown(
+                            f"- [{res.get('title', '')}]({res.get('url', '')})"
+                        )
+                    if "body" in res:
+                        st.markdown(res["body"])
+
     except FileNotFoundError:
         st.error(f"YAMLファイルが見つかりません: {yaml_file_path}")
     except Exception as e:

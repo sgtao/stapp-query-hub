@@ -54,11 +54,9 @@ def main():
 
     # Display the search results
     st.write("### Search Results")
-    # if not st.session_state.wiki_query_results:
     if not query_results:
         st.info("一致なし")
     else:
-        # for result in st.session_state.wiki_query_results:
         for result in query_results:
             with st.expander(f"📚 {result.get('word')}", expanded=False):
                 st.write(result.get("link"))
@@ -72,6 +70,8 @@ def main():
                     # st.info(f"[{word}](https://ja.wikipedia.org/wiki/{word})")
                     # st.markdown(page_content)
                     modal("page_viewer", result.get("word"))
+
+        st.session_state.query_result = query_results
 
 
 if __name__ == "__main__":
