@@ -42,7 +42,7 @@ def main():
 
     st.page_link("main.py", label="Back to Home", icon="🏠")
 
-    st.title(f"📔 {APP_TITLE}")
+    st.title(f"📚 {APP_TITLE}")
 
     """
     In the meantime,

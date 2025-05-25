@@ -69,7 +69,7 @@ def main():
 
     st.page_link("main.py", label="Back to Home", icon="🏠")
 
-    st.title("Log Viewer")
+    st.title(f"👓 {APP_TITLE}")
 
     record_files = search_recorder.get_yaml_filelist()
     index_file = record_files.index(YAML_FILE_PATH)

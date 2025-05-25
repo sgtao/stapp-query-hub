@@ -21,7 +21,12 @@ def main():
     st.page_link(
         page="pages/11_wikipedia_search.py",
         label="Go to Wikipedia Search App",
-        icon="📔",
+        icon="📚",
+    )
+    st.page_link(
+        page="pages/12_qiita_search.py",
+        label="Go to Qiita API Search App",
+        icon="💻",
     )
     # ログ表示ページへのリンク
     st.page_link("pages/21_logs_viewer.py", label="View Logs", icon="📄")

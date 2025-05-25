@@ -75,7 +75,7 @@ class WikiSearch:
                     num_results=num_results,
                 )
 
-                # search_recorder.save_to_yamlfile(query_results)
+                # record query result
                 search_recorder = SearchResultRecorder()
                 search_recorder.save_to_yamlfile(
                     label="Wikipedia",
